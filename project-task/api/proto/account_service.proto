@@ -1,0 +1,148 @@
+syntax = "proto3";
+option go_package = "./pb;account";
+
+message AccountReqMessage {
+  int64 memberId = 1;
+  string projectCode = 2;
+  int64 page = 3;
+  int64 pageSize = 4;
+  string organizationCode = 5;
+  int32 searchType = 6;
+  string departmentCode = 7;
+
+}
+
+message MemberAccount{
+  int64 id = 1;
+  string code = 2;
+  string OrganizationCode = 3;
+  string DepartmentCode = 4;
+  string Authorize = 5;
+  int32 isOwner = 6;
+  string name = 7;
+  string mobile = 8;
+  string email = 9;
+  string createTime = 10;
+  string lastLoginTime = 11;
+  int32 status = 12;
+  string Description = 13;
+  string Avatar = 14;
+  string Position = 15;
+  string Department = 16;
+  string MembarAccountCode = 17;
+  string Departments = 18;
+  string StatusText = 19;
+  repeated string AuthorizeArr = 20;
+}
+message ProjectAuth{
+  int64 id = 1;
+  string OrganizationCode = 2;
+  string Title = 3;
+  string CreateAt = 4;
+  int32 Sort = 5;
+  int32 status = 6;
+  string desc = 7;
+  int64 CreateBy = 8;
+  int32 IsDefault = 9;
+  string Type = 10;
+  int32 CanDelete = 11;
+}
+message AccountResponse{
+  int64 total = 1;
+  repeated MemberAccount accountList = 2;
+  repeated ProjectAuth authList = 3;
+}
+
+message DepartmentReqMessage {
+  int64 memberId = 1;
+  string organizationCode = 2;
+  int64 page = 3;
+  int64 pageSize = 4;
+  string departmentCode = 5;
+  string parentDepartmentCode = 6;
+  string name = 7;
+}
+
+message DepartmentMessage{
+  int64 id = 1;
+  string code = 2;
+  string OrganizationCode = 3;
+  string Name = 4;
+  string createTime = 5;
+  string pcode = 6;
+  string path = 7;
+}
+
+message ListDepartmentMessage{
+  repeated DepartmentMessage list = 1;
+  int64  total = 2;
+}
+message AuthReqMessage {
+  int64 memberId = 1;
+  string organizationCode = 2;
+  int64 page = 3;
+  int64 pageSize = 4;
+  string action = 5;
+  int64 authId = 6;
+  repeated string nodes = 7;
+}
+message ListAuthMessage{
+  repeated ProjectAuth list = 1;
+  int64  total = 2;
+}
+
+message MenuReqMessage {
+}
+message MenuMessageAccount {
+  int64  id = 1;
+  int64 pid = 2;
+  string title = 3;
+  string icon = 4;
+  string url = 5;
+  string filePath = 6;
+  string params = 7;
+  string node = 8;
+  int32 sort = 9;
+  int32 status = 10;
+  int64 createBy = 11;
+  int32 isInner = 12;
+  string values = 13;
+  int32 showSlider = 14;
+  string statusText = 15;
+  string innerText  = 16;
+  string fullUrl    = 17;
+  repeated MenuMessageAccount children = 18;
+}
+message MenuResponseMessage{
+  repeated MenuMessageAccount list = 1;
+}
+message ProjectNodeAuthMessage{
+  int64 id = 1;
+  string node = 2;
+  string title = 3;
+  string pnode = 4;
+  int32 isLogin = 5;
+  int32 isMenu = 6;
+  int32 isAuth = 7;
+  bool checked = 8;
+  string key = 9;
+  repeated ProjectNodeAuthMessage children = 10;
+}
+
+message ApplyResponse {
+  repeated ProjectNodeAuthMessage list = 1;
+  repeated string checkedList = 2;
+}
+message AuthNodesResponse {
+  repeated string list = 1;
+}
+service AccountService {
+  rpc Account(AccountReqMessage) returns(AccountResponse){}
+  rpc SaveDepartment(DepartmentReqMessage) returns(DepartmentMessage){}
+  rpc ListDepartment(DepartmentReqMessage)returns(ListDepartmentMessage){}
+  rpc ReadDepartment(DepartmentReqMessage)returns(DepartmentMessage){}
+  rpc AuthList(AuthReqMessage) returns(ListAuthMessage){}
+  rpc MenuList(MenuReqMessage) returns(MenuResponseMessage){}
+  rpc AuthApply(AuthReqMessage) returns(ApplyResponse){}
+  rpc AuthNodesByMemberId(AuthReqMessage) returns(AuthNodesResponse){}
+}
